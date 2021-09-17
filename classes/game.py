@@ -49,6 +49,11 @@ class Person:
     def reduce_mp(self, cost):
         self.mp -= cost
 
+    def heal(self, dmg):
+        self.hp += dmg
+        if self.hp > self.maxhp:
+            self.hp = self.maxhp
+
 
     def choose_action(self):
         i = 1
