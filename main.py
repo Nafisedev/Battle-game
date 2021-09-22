@@ -27,7 +27,9 @@ hielixer = Item("MegaElixer", "elixer", "Fully restores party's HP/MP", 9999)
 grenade = Item("Grenade", "attack", "deals 500 damage", 500)
 
 player_spells = [fire, thunder, blizzard, meteor, cure, cura]
-player_items = [potion, hipotion, superpotion, elixer, hielixer, grenade]
+player_items = [{"item": potion, "quantity": 15}, {"item": hipotion, "quantity": 5},
+                {"item": superpotion, "quantity": 5}, {"item": elixer, "quantity": 5},
+                {"item": hielixer, "quantity": 2}, {"item": grenade, "quantity": 5}]
 
 
 #Instantiate People
@@ -81,10 +83,24 @@ while running:
         if item_choice == -1:
             continue
 
-        item = players.items[item_choice]
+        item = players.items[item_choice]["item"]
+
+        if players.items[item_choice]["quantity"] == 0:
+            print(bcolors.FAIL + "\n" + "None left..." + bcolors.ENDC)
+            continue
+
+        players.items[item_choice]["quantity"] -= 1
+
         if item.type == "potion":
             players.heal(item.prop)
             print(bcolors.OKGREEN + "\n" + item.name  + " heals for", str(item.prop), "HP" + bcolors.ENDC)
+        elif item.type == "elixer":
+            players.hp = players.maxhp
+            players.mp = players.maxmp
+            print(bcolors.OKGREEN + "\n" + item.name + " fully restores HP/MP" + bcolors.ENDC)
+        elif item.type == "attack":
+            enemy.take_damage(item.prop)
+            print(bcolors.FAIL + "\n" + item.name + " deals", str(item.prop), " point of damage" + bcolors.ENDC)
 
     enemy_choice = 1
 
